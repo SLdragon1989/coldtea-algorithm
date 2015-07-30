@@ -21,8 +21,10 @@ namespace FacePP
             String apiSecret = "BmskojfFyrZVQhkLfNSnRzX-lK8musO6";
             FaceService faceService = new FaceService(apiKey, apiSecret);
 
-            String filePath = "D:\\Codes\\datasets\\face\\king.jpg";
+            string filePath = "G:\\data\\Big-Bang-Theory-6.jpg";
             DetectResult detectResult = faceService.Detection_DetectImg(filePath);
+
+            Image<Bgr, Byte> srcImg = new Image<Bgr, Byte>(filePath);
 
             for(int cnt=0; cnt < detectResult.face.Count; cnt++)
             {
@@ -45,6 +47,19 @@ namespace FacePP
                 Console.WriteLine("Age: " + age.value.ToString());
                 Console.WriteLine("Gender: " + gender.value.ToString());
                 Console.WriteLine("Race: " + race.value.ToString());
+
+                Rectangle faceRect = new Rectangle((int)((center.x - 0.5 * detectResult.face[cnt].position.width) * detectResult.img_width / 100),
+                    (int)((center.y - 0.5 * detectResult.face[cnt].position.height) * detectResult.img_height / 100),
+                    (int)((detectResult.face[cnt].position.height) * detectResult.img_height / 100), 
+                    (int)((detectResult.face[cnt].position.width) * detectResult.img_width / 100));
+                srcImg.Draw(faceRect, new Bgr(0, 255, 0), 3);
+                Cross2DF leftEyeF = new Cross2DF(new System.Drawing.Point((int)(nose.x * detectResult.img_width / 100), (int)(nose.y * detectResult.img_height / 100)), 5, 5);
+                srcImg.Draw(leftEyeF, new Bgr(255, 0, 0), 3);
+
+                Image<Bgr, byte> faceImg = srcImg.GetSubRect(faceRect);
+                faceImg.Save(String.Format("G:\\data\\Big-Bang-Theory-6-face-{0}.jpg", cnt));
+
+                srcImg.Save("G:\\data\\Big-Bang-Theory-6-result.jpg");
             }
         }
     }

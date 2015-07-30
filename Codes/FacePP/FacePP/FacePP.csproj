@@ -29,7 +29,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -51,36 +51,37 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV">
-      <HintPath>..\..\..\EmguCV_300\bin\Emgu.CV.dll</HintPath>
+      <HintPath>C:\EmguCV_300\bin\Emgu.CV.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Contrib">
-      <HintPath>..\..\..\EmguCV_300\bin\Emgu.CV.Contrib.dll</HintPath>
+      <HintPath>C:\EmguCV_300\bin\Emgu.CV.Contrib.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.ML">
+      <HintPath>C:\EmguCV_300\bin\Emgu.CV.ML.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Shape">
-      <HintPath>..\..\..\EmguCV_300\bin\Emgu.CV.Shape.dll</HintPath>
+      <HintPath>C:\EmguCV_300\bin\Emgu.CV.Shape.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Superres">
-      <HintPath>..\..\..\EmguCV_300\bin\Emgu.CV.Superres.dll</HintPath>
+      <HintPath>C:\EmguCV_300\bin\Emgu.CV.Superres.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.Util">
-      <HintPath>..\..\..\EmguCV_300\bin\Emgu.Util.dll</HintPath>
+      <HintPath>C:\EmguCV_300\bin\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="FaceppSDK">
-      <HintPath>..\..\..\downloaded_code\facepp-csharp-sdk-beta\FaceppSDK.dll</HintPath>
+      <HintPath>..\..\..\..\facepp-csharp-sdk-beta\FaceppSDK.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\downloaded_code\facepp-csharp-sdk-beta\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\facepp-csharp-sdk-beta\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\..\..\EmguCV_300\bin\ZedGraph.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
