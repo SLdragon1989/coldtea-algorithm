@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacePP", "FacePP\FacePP.csproj", "{0C3CDC9E-CCC2-4457-8158-665061C8A3AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceMorphing", "FaceMorphing\FaceMorphing.csproj", "{3F50B93A-1E71-43BD-B73E-C2E46B534020}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,16 @@ Global
 		{0C3CDC9E-CCC2-4457-8158-665061C8A3AC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0C3CDC9E-CCC2-4457-8158-665061C8A3AC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0C3CDC9E-CCC2-4457-8158-665061C8A3AC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3F50B93A-1E71-43BD-B73E-C2E46B534020}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
