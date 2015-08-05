@@ -48,7 +48,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Desktop\FaceAPI-Samples-CSharp\ClientLibrary\ClientLibrary.csproj">
+    <ProjectReference Include="..\FaceAPI-Samples-CSharp\ClientLibrary\ClientLibrary.csproj">
       <Project>{34daa01d-3f6b-4622-9425-726b0b4a6c78}</Project>
       <Name>ClientLibrary</Name>
     </ProjectReference>
