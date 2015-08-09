@@ -7,30 +7,95 @@ using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.CV.Structure;
+using Emgu.CV.CvEnum;
 using System.Drawing;
 
 namespace FaceAPI
 {
     class FaceIntegration
     {
-        private Image<Bgr, byte> faceImgA, faceImgB, resultFace;
+        private Image<Bgr, byte> faceImgA, faceImgB, dstFace;
         private double integrationRatio;
         private Size srcSize, dstSize;
-        private IList<PointF> landmarkA, landmarkB;
-        private IList<Point> resultLandmark;
+        private PointF[] landmarkA, landmarkB;
+        private PointF[] srcLandmarkA, srcLandmarkB, dstLandmark;
+
+        private const int pointNum = 3;
 
         public FaceIntegration(
             Image<Bgr, byte> _faceImgA,
             Image<Bgr, byte> _faceImgB,
-            List<PointF> _landmarkA,
-            List<PointF> _landmarkB,
-            Size _size)
+            PointF[] _landmarkA,
+            PointF[] _landmarkB,
+            Size _size,
+            double _integrationRatio)
         {
             faceImgA = _faceImgA.Clone();
             faceImgB = _faceImgB.Clone();
             landmarkA = _landmarkA;
             landmarkB = _landmarkB;
             srcSize = _size;
+            integrationRatio = _integrationRatio;
+
+            setSrcFaceParam();            
+            setDstFaceParam();
         }
+
+        public Image<Bgr, byte> integrateFace()
+        {
+            Mat srcRotMatA = new Mat();
+            Mat srcRotMatB = new Mat();
+
+            srcRotMatA = CvInvoke.GetAffineTransform(srcLandmarkA, dstLandmark);
+            srcRotMatB = CvInvoke.GetAffineTransform(srcLandmarkB, dstLandmark);
+            Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
+            Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
+            srcWarpA.SetZero();
+            srcWarpB.SetZero();
+            CvInvoke.WarpAffine(faceImgA, srcWarpA, srcRotMatA, dstSize);
+            CvInvoke.WarpAffine(faceImgB, srcWarpB, srcRotMatB, dstSize);
+
+            dstFace = integrationRatio * faceImgA + (1 - integrationRatio) * faceImgB;
+
+            return dstFace;
+        }
+
+        private void setDstFaceParam()
+        {
+            dstSize = srcSize;
+            dstFace = new Image<Bgr, byte>(dstSize);
+            dstFace.SetZero();
+
+            dstLandmark = new PointF[pointNum];
+            for (int cnt = 0; cnt < pointNum; cnt++)
+            {
+                dstLandmark[cnt] = new PointF(
+                    (float)((landmarkA[cnt].X + landmarkB[cnt].X) * srcSize.Width * integrationRatio),
+                    (float)((landmarkA[cnt].Y + landmarkB[cnt].Y) * srcSize.Height * (1 - integrationRatio)));
+            }
+        }
+
+        private void setSrcFaceParam()
+        {
+            faceImgA = faceImgA.Resize(srcSize.Width, srcSize.Height, Inter.Linear);
+            faceImgB = faceImgB.Resize(srcSize.Width, srcSize.Height, Inter.Linear);
+
+            srcLandmarkA = new PointF[pointNum];
+            for (int cnt = 0; cnt < pointNum; cnt++)
+            {
+                srcLandmarkA[cnt] = new PointF(
+                    (float)(landmarkA[cnt].X * srcSize.Width),
+                    (float)(landmarkA[cnt].Y * srcSize.Height));
+            }
+
+            srcLandmarkB = new PointF[pointNum];
+            for (int cnt = 0; cnt < pointNum; cnt++)
+            {
+                srcLandmarkB[cnt] = new PointF(
+                    (float)(landmarkB[cnt].X * srcSize.Width),
+                    (float)(landmarkB[cnt].Y * srcSize.Height));
+            }
+        }
+
     }
 }

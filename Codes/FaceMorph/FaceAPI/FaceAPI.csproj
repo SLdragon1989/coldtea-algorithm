@@ -48,19 +48,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Emgu.CV">
-      <HintPath>..\..\..\..\EmguCV_300\bin\Emgu.CV.dll</HintPath>
+      <HintPath>..\EmguDlls\Emgu.CV.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Contrib">
-      <HintPath>..\..\..\..\EmguCV_300\bin\Emgu.CV.Contrib.dll</HintPath>
+      <HintPath>..\EmguDlls\Emgu.CV.Contrib.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Shape">
-      <HintPath>..\..\..\..\EmguCV_300\bin\Emgu.CV.Shape.dll</HintPath>
+      <HintPath>..\EmguDlls\Emgu.CV.Shape.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.Superres">
-      <HintPath>..\..\..\..\EmguCV_300\bin\Emgu.CV.Superres.dll</HintPath>
+      <HintPath>..\EmguDlls\Emgu.CV.Superres.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.Util">
-      <HintPath>..\..\..\..\EmguCV_300\bin\Emgu.Util.dll</HintPath>
+      <HintPath>..\EmguDlls\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

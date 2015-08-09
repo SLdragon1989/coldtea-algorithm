@@ -19,14 +19,44 @@ namespace FaceAPI
     {
         static void Main(string[] args)
         {
-            FaceRectangle[] faceRectangles;
-            FaceLandmarks[] faceLandmarks;
-            string filePath = "D:\\Codes\\datasets\\face_morph\\result_bbt.jpg";
-            runFaceAPI(filePath, out faceRectangles, out faceLandmarks);
-            convertLandmarkFormation(ref faceLandmarks[0], ref faceRectangles[0]);
-            Rectangle faceRect = convertRectangleFormation(faceRectangles[0]);
-            Image<Bgr, byte> srcImg1 = new Image<Bgr, byte>(filePath);
-            Image<Bgr, byte> faceImg1 = srcImg1.GetSubRect(faceRect);
+            FaceRectangle[] obamaRect, kimRect;
+            FaceLandmarks[] obamaLandmarks, kimLandmarks;
+            string obamaFile = "G:\\facedata\\a.jpg";
+            string kimFile = "G:\\facedata\\b.jpg";
+
+            runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
+            runFaceAPI(kimFile, out kimRect, out kimLandmarks);
+
+            PointF[] obamaLandmark = convertLandmarkFormation(ref obamaLandmarks[0], ref obamaRect[0]);
+            PointF[] kimLandmark = convertLandmarkFormation(ref kimLandmarks[0], ref kimRect[0]);
+
+            Rectangle obamaRectangle = convertRectangleFormation(obamaRect[0]);
+            Rectangle kimRectangle = convertRectangleFormation(kimRect[0]);
+
+            Image<Bgr, byte> obamaFace = new Image<Bgr, byte>(obamaFile).GetSubRect(obamaRectangle);
+            Image<Bgr, byte> kimFace = new Image<Bgr, byte>(kimFile).GetSubRect(kimRectangle);
+
+            obamaFace.Save("G:\\facedata\\obama_rect.jpg");
+            kimFace.Save("G:\\facedata\\kim_rect.jpg");
+
+            FaceIntegration faceIntegration = new FaceIntegration(
+                obamaFace,
+                kimFace,
+                obamaLandmark,
+                kimLandmark,
+                new Size(300, 300),
+                0.5);
+            Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
+            dstFace.Save("G:\\facedata\\obama_kim.jpg");
+
+            //FaceRectangle[] faceRectangles;
+            //FaceLandmarks[] faceLandmarks;
+            //string filePath = "G:\\data\\Big-Bang-Theory-6.jpg";
+            //runFaceAPI(filePath, out faceRectangles, out faceLandmarks);
+            //convertLandmarkFormation(ref faceLandmarks[0], ref faceRectangles[0]);
+            //Rectangle faceRect = convertRectangleFormation(faceRectangles[0]);
+            //Image<Bgr, byte> srcImg1 = new Image<Bgr, byte>(filePath);
+            //Image<Bgr, byte> faceImg1 = srcImg1.GetSubRect(faceRect);
         }
 
         private static void runFaceAPI(
