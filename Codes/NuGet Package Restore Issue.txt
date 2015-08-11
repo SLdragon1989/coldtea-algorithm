@@ -1,0 +1,3 @@
+Check:
+http://blchen.com/solution-to-nuget-not-update-or-restore-package/
+If you encounter a package restore issue for Newton.Json in VS2015
