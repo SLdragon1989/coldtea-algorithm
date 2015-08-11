@@ -21,8 +21,8 @@ namespace FaceAPI
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = "G:\\facedata\\a.jpg";
-            string kimFile = "G:\\facedata\\b.jpg";
+            string obamaFile = "D:\\Codes\\datasets\\face_morph\\obama.jpg";
+            string kimFile = "D:\\Codes\\datasets\\face_morph\\xi.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -36,8 +36,8 @@ namespace FaceAPI
             Image<Bgr, byte> obamaFace = new Image<Bgr, byte>(obamaFile).GetSubRect(obamaRectangle);
             Image<Bgr, byte> kimFace = new Image<Bgr, byte>(kimFile).GetSubRect(kimRectangle);
 
-            obamaFace.Save("G:\\facedata\\obama_rect.jpg");
-            kimFace.Save("G:\\facedata\\kim_rect.jpg");
+            obamaFace.Save("D:\\Codes\\datasets\\face_morph\\obama_rect.jpg");
+            kimFace.Save("D:\\Codes\\datasets\\face_morph\\kim_rect.jpg");
 
             FaceIntegration faceIntegration = new FaceIntegration(
                 obamaFace,
@@ -45,18 +45,9 @@ namespace FaceAPI
                 obamaLandmark,
                 kimLandmark,
                 new Size(300, 300),
-                0.5);
+                0.7);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
-            dstFace.Save("G:\\facedata\\obama_kim.jpg");
-
-            //FaceRectangle[] faceRectangles;
-            //FaceLandmarks[] faceLandmarks;
-            //string filePath = "G:\\data\\Big-Bang-Theory-6.jpg";
-            //runFaceAPI(filePath, out faceRectangles, out faceLandmarks);
-            //convertLandmarkFormation(ref faceLandmarks[0], ref faceRectangles[0]);
-            //Rectangle faceRect = convertRectangleFormation(faceRectangles[0]);
-            //Image<Bgr, byte> srcImg1 = new Image<Bgr, byte>(filePath);
-            //Image<Bgr, byte> faceImg1 = srcImg1.GetSubRect(faceRect);
+            dstFace.Save("D:\\Codes\\datasets\\face_morph\\obama_kim.jpg");
         }
 
         private static void runFaceAPI(
@@ -85,8 +76,8 @@ namespace FaceAPI
             ref FaceRectangle _rectangle)
         {
             PointF[] retLandmarks = new PointF[3];
-            retLandmarks[0] = convertPointFormation(_landmarks.EyeLeftInner, _rectangle);
-            retLandmarks[1] = convertPointFormation(_landmarks.EyeRightInner, _rectangle);
+            retLandmarks[0] = convertPointFormation(_landmarks.EyeLeftOuter, _rectangle);
+            retLandmarks[1] = convertPointFormation(_landmarks.EyeRightOuter, _rectangle);
             retLandmarks[2] = convertPointFormation(_landmarks.NoseTip, _rectangle);
             return retLandmarks;
         }
