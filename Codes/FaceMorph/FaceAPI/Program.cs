@@ -17,12 +17,13 @@ namespace FaceAPI
 {
     class Program
     {
+        static string picFolder = "D:\\Codes\\datasets\\face_morph\\"; 
         static void Main(string[] args)
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = "D:\\Codes\\datasets\\face_morph\\obama.jpg";
-            string kimFile = "D:\\Codes\\datasets\\face_morph\\xi.jpg";
+            string obamaFile = picFolder + "pic1.jpg";
+            string kimFile = picFolder + "pic2.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -36,8 +37,8 @@ namespace FaceAPI
             Image<Bgr, byte> obamaFace = new Image<Bgr, byte>(obamaFile).GetSubRect(obamaRectangle);
             Image<Bgr, byte> kimFace = new Image<Bgr, byte>(kimFile).GetSubRect(kimRectangle);
 
-            obamaFace.Save("D:\\Codes\\datasets\\face_morph\\obama_rect.jpg");
-            kimFace.Save("D:\\Codes\\datasets\\face_morph\\kim_rect.jpg");
+            obamaFace.Save(picFolder + "pic1_rect.jpg");
+            kimFace.Save(picFolder + "pic2_rect.jpg");
 
             FaceIntegration faceIntegration = new FaceIntegration(
                 obamaFace,
@@ -45,9 +46,9 @@ namespace FaceAPI
                 obamaLandmark,
                 kimLandmark,
                 new Size(300, 300),
-                0.7);
+                0.5);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
-            dstFace.Save("D:\\Codes\\datasets\\face_morph\\obama_kim.jpg");
+            dstFace.Save(picFolder + "result.jpg");
         }
 
         private static void runFaceAPI(
