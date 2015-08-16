@@ -19,8 +19,10 @@ namespace FaceAPI
         private Size srcSize, dstSize;
         private PointF[] landmarkA, landmarkB;
         private PointF[] srcLandmarkA, srcLandmarkB, dstLandmark;
+        private PointF[,] triangularSetA, triangularSetB, triangularSetDst;
+        private PointF[,] quadrangularSetA, quadrangularSetB, quadrangularSetDst;
 
-        private const int pointNum = 3;
+        private const int pointNum = 27;
 
         public FaceIntegration(
             Image<Bgr, byte> _faceImgA,
@@ -37,8 +39,11 @@ namespace FaceAPI
             srcSize = _size;
             integrationRatio = _integrationRatio;
 
-            setSrcFaceParam();            
+            setSrcFaceParam();     
             setDstFaceParam();
+
+            setTriangularSet();
+            setQuadrangularSet();
         }
 
         public Image<Bgr, byte> integrateFace()
@@ -58,21 +63,6 @@ namespace FaceAPI
             dstFace = integrationRatio * faceImgA + (1 - integrationRatio) * faceImgB;
 
             return dstFace;
-        }
-
-        private void setDstFaceParam()
-        {
-            dstSize = srcSize;
-            dstFace = new Image<Bgr, byte>(dstSize);
-            dstFace.SetZero();
-
-            dstLandmark = new PointF[pointNum];
-            for (int cnt = 0; cnt < pointNum; cnt++)
-            {
-                dstLandmark[cnt] = new PointF(
-                    (float)((landmarkA[cnt].X + landmarkB[cnt].X) * srcSize.Width * integrationRatio),
-                    (float)((landmarkA[cnt].Y + landmarkB[cnt].Y) * srcSize.Height * (1 - integrationRatio)));
-            }
         }
 
         private void setSrcFaceParam()
@@ -95,6 +85,38 @@ namespace FaceAPI
                     (float)(landmarkB[cnt].X * srcSize.Width),
                     (float)(landmarkB[cnt].Y * srcSize.Height));
             }
+        }
+
+        private void setDstFaceParam()
+        {
+            dstSize = srcSize;
+            dstFace = new Image<Bgr, byte>(dstSize);
+            dstFace.SetZero();
+
+            dstLandmark = new PointF[pointNum];
+            for (int cnt = 0; cnt < pointNum; cnt++)
+            {
+                dstLandmark[cnt] = new PointF(
+                    (float)((landmarkA[cnt].X + landmarkB[cnt].X) * srcSize.Width * integrationRatio),
+                    (float)((landmarkA[cnt].Y + landmarkB[cnt].Y) * srcSize.Height * (1 - integrationRatio)));
+            }
+        }
+
+        private void setTriangularSet()
+        {
+            triangularSetA = new PointF[10, 3]{
+                {landmarkA[(int)Position.EyebrowLeftOuter],
+                landmarkA[(int)Position.EyebrowLeftInner],
+                landmarkA[(int)Position.PupilLeft]},
+                {landmarkA[(int)Position.EyebrowRightOuter],
+                landmarkA[(int)Position.EyebrowRightInner],
+                landmarkA[(int)Position.PupilRight]},
+            };
+        }
+
+        private void setQuadrangularSet()
+        {
+
         }
 
     }
