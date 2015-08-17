@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientLibrary", "ClientLibrary\ClientLibrary.csproj", "{34DAA01D-3F6B-4622-9425-726B0B4A6C78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceAPI", "FaceAPI\FaceAPI.csproj", "{E9C9AEEF-FF98-4D6B-A36F-F3DD79E2AAB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTest", "WebTest\WebTest.csproj", "{7DC56AC3-DACE-413D-8081-1E9690EF6EF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E9C9AEEF-FF98-4D6B-A36F-F3DD79E2AAB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9C9AEEF-FF98-4D6B-A36F-F3DD79E2AAB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9C9AEEF-FF98-4D6B-A36F-F3DD79E2AAB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC56AC3-DACE-413D-8081-1E9690EF6EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC56AC3-DACE-413D-8081-1E9690EF6EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC56AC3-DACE-413D-8081-1E9690EF6EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC56AC3-DACE-413D-8081-1E9690EF6EF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
