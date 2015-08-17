@@ -19,8 +19,8 @@ namespace FaceAPI
         private Size srcSize, dstSize;
         private PointF[] landmarkA, landmarkB;
         private PointF[] srcLandmarkA, srcLandmarkB, dstLandmark;
-        private PointF[,] triangularSetA, triangularSetB, triangularSetDst;
-        private PointF[,] quadrangularSetA, quadrangularSetB, quadrangularSetDst;
+        private PointF[,] triangularSetA, triangularSetB;
+        private PointF[,] quadrangularSetA, quadrangularSetB;
 
         private const int pointNum = 27;
 
@@ -42,8 +42,8 @@ namespace FaceAPI
             setSrcFaceParam();     
             setDstFaceParam();
 
-            setTriangularSet();
-            setQuadrangularSet();
+            setSrcTriangularSet();
+            setSrcQuadrangularSet();
         }
 
         public Image<Bgr, byte> integrateFace()
@@ -102,7 +102,7 @@ namespace FaceAPI
             }
         }
 
-        private void setTriangularSet()
+        private void setSrcTriangularSet()
         {
             triangularSetA = new PointF[10, 3]{
                 {landmarkA[(int)Position.EyebrowLeftOuter],
@@ -111,12 +111,113 @@ namespace FaceAPI
                 {landmarkA[(int)Position.EyebrowRightOuter],
                 landmarkA[(int)Position.EyebrowRightInner],
                 landmarkA[(int)Position.PupilRight]},
+                {landmarkA[(int)Position.MouthLeft],
+                landmarkA[(int)Position.MouthRight],
+                landmarkA[(int)Position.UnderLipBottom]},
+                {new PointF(0, 0),
+                landmarkA[(int)Position.EyebrowLeftInner],
+                landmarkA[(int)Position.EyebrowLeftOuter]},
+                {new Point(1, 0),
+                landmarkA[(int)Position.EyebrowRightInner],
+                landmarkA[(int)Position.EyebrowRightOuter]},
+                {landmarkA[(int)Position.MouthLeft],
+                landmarkA[(int)Position.UnderLipBottom],
+                new PointF(0, 1)},
+                {landmarkA[(int)Position.MouthRight],
+                landmarkA[(int)Position.UnderLipBottom],
+                new PointF(1, 1)},
+                {landmarkA[(int)Position.UnderLipBottom],
+                new PointF(1, 0),
+                new PointF(1, 1)},
+                {landmarkA[(int)Position.EyebrowLeftOuter],
+                landmarkA[(int)Position.PupilLeft],
+                landmarkA[(int)Position.MouthLeft]},
+                {landmarkA[(int)Position.EyebrowRightOuter],
+                landmarkA[(int)Position.PupilRight],
+                landmarkA[(int)Position.MouthRight]},
+            };
+
+            triangularSetB = new PointF[10, 3]{
+                {landmarkB[(int)Position.EyebrowLeftOuter],
+                landmarkB[(int)Position.EyebrowLeftInner],
+                landmarkB[(int)Position.PupilLeft]},
+                {landmarkB[(int)Position.EyebrowRightOuter],
+                landmarkB[(int)Position.EyebrowRightInner],
+                landmarkB[(int)Position.PupilRight]},
+                {landmarkB[(int)Position.MouthLeft],
+                landmarkB[(int)Position.MouthRight],
+                landmarkB[(int)Position.UnderLipBottom]},
+                {new PointF(0, 0),
+                landmarkB[(int)Position.EyebrowLeftInner],
+                landmarkB[(int)Position.EyebrowLeftOuter]},
+                {new Point(1, 0),
+                landmarkB[(int)Position.EyebrowRightInner],
+                landmarkB[(int)Position.EyebrowRightOuter]},
+                {landmarkB[(int)Position.MouthLeft],
+                landmarkB[(int)Position.UnderLipBottom],
+                new PointF(0, 1)},
+                {landmarkB[(int)Position.MouthRight],
+                landmarkB[(int)Position.UnderLipBottom],
+                new PointF(1, 1)},
+                {landmarkB[(int)Position.UnderLipBottom],
+                new PointF(1, 0),
+                new PointF(1, 1)},
+                {landmarkB[(int)Position.EyebrowLeftOuter],
+                landmarkB[(int)Position.PupilLeft],
+                landmarkB[(int)Position.MouthLeft]},
+                {landmarkB[(int)Position.EyebrowRightOuter],
+                landmarkB[(int)Position.PupilRight],
+                landmarkB[(int)Position.MouthRight]},
             };
         }
 
-        private void setQuadrangularSet()
+        private void setSrcQuadrangularSet()
         {
+            quadrangularSetA = new PointF[5, 4] {
+                {landmarkA[(int)Position.EyebrowLeftInner],
+                landmarkA[(int)Position.EyebrowRightInner],
+                landmarkA[(int)Position.PupilLeft],
+                landmarkA[(int)Position.PupilRight]},
+                {landmarkA[(int)Position.PupilLeft],
+                landmarkA[(int)Position.PupilRight],
+                landmarkA[(int)Position.MouthRight],
+                landmarkA[(int)Position.MouthLeft]},
+                {landmarkA[(int)Position.EyebrowLeftInner],
+                landmarkA[(int)Position.EyebrowRightInner],
+                new PointF(1, 0),
+                new PointF(0, 0)},
+                {landmarkA[(int)Position.EyebrowRightOuter],
+                landmarkA[(int)Position.MouthRight],
+                new PointF(1, 1),
+                new PointF(1, 0)},
+                {landmarkA[(int)Position.EyeLeftOuter],
+                landmarkA[(int)Position.MouthLeft],
+                new PointF(0, 1),
+                new PointF(0, 0)}
+            };
 
+            quadrangularSetB = new PointF[5, 4] {
+                {landmarkB[(int)Position.EyebrowLeftInner],
+                landmarkB[(int)Position.EyebrowRightInner],
+                landmarkB[(int)Position.PupilLeft],
+                landmarkB[(int)Position.PupilRight]},
+                {landmarkB[(int)Position.PupilLeft],
+                landmarkB[(int)Position.PupilRight],
+                landmarkB[(int)Position.MouthRight],
+                landmarkB[(int)Position.MouthLeft]},
+                {landmarkB[(int)Position.EyebrowLeftInner],
+                landmarkB[(int)Position.EyebrowRightInner],
+                new PointF(1, 0),
+                new PointF(0, 0)},
+                {landmarkB[(int)Position.EyebrowRightOuter],
+                landmarkB[(int)Position.MouthRight],
+                new PointF(1, 1),
+                new PointF(1, 0)},
+                {landmarkB[(int)Position.EyeLeftOuter],
+                landmarkB[(int)Position.MouthLeft],
+                new PointF(0, 1),
+                new PointF(0, 0)}
+            };
         }
 
     }
