@@ -15,6 +15,7 @@ namespace FaceAPI
     class FaceIntegration
     {
         private Image<Bgr, byte> faceImgA, faceImgB, dstFace;
+        private Image<Gray, byte> dstMask;
         private double integrationRatio;
         private Size srcSize, dstSize;
         private PointF[] landmarkA, landmarkB;
@@ -102,6 +103,8 @@ namespace FaceAPI
             dstSize = srcSize;
             dstFace = new Image<Bgr, byte>(dstSize);
             dstFace.SetZero();
+            dstMask = new Image<Gray, byte>(dstSize);
+            dstMask.SetZero();
 
             dstLandmark = new PointF[pointNum];
             for (int cnt = 0; cnt < pointNum; cnt++)
@@ -162,8 +165,8 @@ namespace FaceAPI
             quadrangularSetA = new PointF[5, 4] {
                 {landmarkA[(int)Position.EyebrowLeftOuter],
                 landmarkA[(int)Position.EyebrowRightOuter],
-                landmarkA[(int)Position.PupilLeft],
-                landmarkA[(int)Position.PupilRight]},
+                landmarkA[(int)Position.PupilRight],
+                landmarkA[(int)Position.PupilLeft]},
                 {landmarkA[(int)Position.PupilLeft],
                 landmarkA[(int)Position.PupilRight],
                 landmarkA[(int)Position.MouthRight],
@@ -176,7 +179,7 @@ namespace FaceAPI
                 landmarkA[(int)Position.MouthRight],
                 new PointF(1, 1),
                 new PointF(1, 0)},
-                {landmarkA[(int)Position.EyeLeftOuter],
+                {landmarkA[(int)Position.EyebrowLeftOuter],
                 landmarkA[(int)Position.MouthLeft],
                 new PointF(0, 1),
                 new PointF(0, 0)}
@@ -185,8 +188,8 @@ namespace FaceAPI
             quadrangularSetB = new PointF[5, 4] {
                 {landmarkB[(int)Position.EyebrowLeftOuter],
                 landmarkB[(int)Position.EyebrowRightOuter],
-                landmarkB[(int)Position.PupilLeft],
-                landmarkB[(int)Position.PupilRight]},
+                landmarkB[(int)Position.PupilRight],
+                landmarkB[(int)Position.PupilLeft]},
                 {landmarkB[(int)Position.PupilLeft],
                 landmarkB[(int)Position.PupilRight],
                 landmarkB[(int)Position.MouthRight],
@@ -199,7 +202,7 @@ namespace FaceAPI
                 landmarkB[(int)Position.MouthRight],
                 new PointF(1, 1),
                 new PointF(1, 0)},
-                {landmarkB[(int)Position.EyeLeftOuter],
+                {landmarkB[(int)Position.EyebrowLeftOuter],
                 landmarkB[(int)Position.MouthLeft],
                 new PointF(0, 1),
                 new PointF(0, 0)}
@@ -211,14 +214,14 @@ namespace FaceAPI
             PointF[] pointA = convertPointF(_pointA, _polyCount);
             Image<Gray, byte> maskA = new Image<Gray,byte>(srcSize);
             VectorOfVectorOfPoint pointSetA = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointA, _polyCount)));
-            CvInvoke.FillPoly(maskA, pointSetA, new MCvScalar(255), LineType.FourConnected);
+            CvInvoke.FillPoly(maskA, pointSetA, new MCvScalar(255), LineType.EightConnected);
             Image<Bgr, byte> tempA = new Image<Bgr,byte>(srcSize);
             tempA = faceImgA.Copy(maskA);
 
             PointF[] pointB = convertPointF(_pointB, _polyCount);
             Image<Gray, byte> maskB = new Image<Gray, byte>(srcSize);
             VectorOfVectorOfPoint pointSetB = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointB, _polyCount)));
-            CvInvoke.FillPoly(maskB, pointSetB,new MCvScalar(255), LineType.FourConnected);
+            CvInvoke.FillPoly(maskB, pointSetB,new MCvScalar(255), LineType.EightConnected);
             Image<Bgr, byte> tempB = new Image<Bgr, byte>(srcSize);
             tempB = faceImgB.Copy(maskB);
 
@@ -239,20 +242,33 @@ namespace FaceAPI
             }
             Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
             Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
+            Image<Gray, byte> maskWarpA = new Image<Gray, byte>(dstSize);
+            Image<Gray, byte> maskWarpB = new Image<Gray, byte>(dstSize);
             srcWarpA.SetZero();
             srcWarpB.SetZero();
+            maskWarpA.SetZero();
+            maskWarpB.SetZero();
 
             if (_polyCount == 3)
             {
                 CvInvoke.WarpAffine(tempA, srcWarpA, srcRotMatA, dstSize);
                 CvInvoke.WarpAffine(tempB, srcWarpB, srcRotMatB, dstSize);
+                CvInvoke.WarpAffine(maskA, maskWarpA, srcRotMatA, dstSize);
+                CvInvoke.WarpAffine(maskB, maskWarpB, srcRotMatB, dstSize);
             }
             else if (_polyCount == 4)
             {
                 CvInvoke.WarpPerspective(tempA, srcWarpA, srcRotMatA, dstSize);
                 CvInvoke.WarpPerspective(tempB, srcWarpB, srcRotMatB, dstSize);
+                CvInvoke.WarpPerspective(maskA, maskWarpA, srcRotMatA, dstSize);
+                CvInvoke.WarpPerspective(maskB, maskWarpB, srcRotMatB, dstSize);
             }
 
+            maskWarpA = maskWarpA - (maskWarpA & dstMask) * 255;
+            maskWarpB = maskWarpB - (maskWarpB & dstMask) * 255;
+            dstMask = dstMask + (maskWarpA & maskWarpB) * 255;
+            srcWarpA = srcWarpA.Copy(maskWarpA);
+            srcWarpB = srcWarpB.Copy(maskWarpB);
             CvInvoke.AddWeighted(srcWarpA, integrationRatio, srcWarpB, 1 - integrationRatio, 0, srcWarpA);
             CvInvoke.Add(dstFace, srcWarpA, dstFace);
         }

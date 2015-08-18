@@ -47,13 +47,13 @@ namespace FaceAPI
 
     class Program
     {
-        static string picFolder = "G:\\facedata\\"; 
+        static string picFolder = "D:\\Codes\\datasets\\face_morph\\"; 
         static void Main(string[] args)
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = picFolder + "a.jpg";
-            string kimFile = picFolder + "b.jpg";
+            string obamaFile = picFolder + "obama.jpg";
+            string kimFile = picFolder + "xi.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -130,7 +130,7 @@ namespace FaceAPI
                 convertPointFormation(_landmarks.MouthRight, _rectangle),
                 convertPointFormation(_landmarks.UnderLipBottom, _rectangle),
                 convertPointFormation(_landmarks.UpperLipBottom, _rectangle),
-                convertPointFormation(_landmarks.UnderLipTop, _rectangle),
+                convertPointFormation(_landmarks.UnderLipTop, _rectangle)
             };
             return retLandmarks;
         }
