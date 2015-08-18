@@ -48,19 +48,43 @@ namespace FaceAPI
 
         public Image<Bgr, byte> integrateFace()
         {
-            Mat srcRotMatA = new Mat();
-            Mat srcRotMatB = new Mat();
+            //Mat srcRotMatA = new Mat();
+            //Mat srcRotMatB = new Mat();
 
-            srcRotMatA = CvInvoke.GetAffineTransform(srcLandmarkA, dstLandmark);
-            srcRotMatB = CvInvoke.GetAffineTransform(srcLandmarkB, dstLandmark);
-            Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
-            Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
-            srcWarpA.SetZero();
-            srcWarpB.SetZero();
-            CvInvoke.WarpAffine(faceImgA, srcWarpA, srcRotMatA, dstSize);
-            CvInvoke.WarpAffine(faceImgB, srcWarpB, srcRotMatB, dstSize);
+            //srcRotMatA = CvInvoke.GetAffineTransform(srcLandmarkA, dstLandmark);
+            //srcRotMatB = CvInvoke.GetAffineTransform(srcLandmarkB, dstLandmark);
+            //Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
+            //Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
+            //srcWarpA.SetZero();
+            //srcWarpB.SetZero();
+            //CvInvoke.WarpAffine(faceImgA, srcWarpA, srcRotMatA, dstSize);
+            //CvInvoke.WarpAffine(faceImgB, srcWarpB, srcRotMatB, dstSize);
 
-            dstFace = integrationRatio * faceImgA + (1 - integrationRatio) * faceImgB;
+            //dstFace = integrationRatio * faceImgA + (1 - integrationRatio) * faceImgB;
+
+            for (int count = 0; count < 10; count++ )
+            {
+                PointF[] triPointA = new PointF[3];
+                PointF[] triPointB = new PointF[3];
+                for (int countInner = 0; count < 3; count++)
+                {
+                    triPointA[countInner] = triangularSetA[count, countInner];
+                    triPointB[countInner] = triangularSetB[count, countInner];
+                }
+                integrateRegion(triPointA, triPointB, 3);
+            }
+
+            for (int count = 0; count < 5; count++)
+            {
+                PointF[] quadPointA = new PointF[4];
+                PointF[] quadPointB = new PointF[4];
+                for (int countInner = 0; count < 4; count++)
+                {
+                    quadPointA[countInner] = quadrangularSetA[count, countInner];
+                    quadPointB[countInner] = quadrangularSetB[count, countInner];
+                }
+                integrateRegion(quadPointA, quadPointB, 4);
+            }
 
             return dstFace;
         }
@@ -218,6 +242,86 @@ namespace FaceAPI
                 new PointF(0, 1),
                 new PointF(0, 0)}
             };
+        }
+
+        private void integrateRegion(PointF[] _pointA, PointF[] _pointB, int _polyCount)
+        {
+            PointF[] pointA = convertPointF(_pointA, _polyCount);
+            Image<Gray, byte> maskA = new Image<Gray,byte>(srcSize);
+            VectorOfVectorOfPoint pointSetA = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointA, _polyCount)));
+            CvInvoke.FillPoly(maskA, pointSetA, new MCvScalar(0));
+            Image<Bgr, byte> tempA = new Image<Bgr,byte>(srcSize);
+            tempA = faceImgA.Copy(maskA);
+
+            PointF[] pointB = convertPointF(_pointB, _polyCount);
+            Image<Gray, byte> maskB = new Image<Gray, byte>(srcSize);
+            VectorOfVectorOfPoint pointSetB = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointB, _polyCount)));
+            CvInvoke.FillPoly(maskB, pointSetB,new MCvScalar(0));
+            Image<Bgr, byte> tempB = new Image<Bgr, byte>(srcSize);
+            tempB = faceImgB.Copy(maskB);
+
+            PointF[] dstPoint = getDstPoint(pointA, pointB, _polyCount);
+
+            Mat srcRotMatA = new Mat();
+            Mat srcRotMatB = new Mat();
+
+            if (_polyCount == 3)
+            {
+                srcRotMatA = CvInvoke.GetAffineTransform(pointA, dstPoint);
+                srcRotMatB = CvInvoke.GetAffineTransform(pointB, dstPoint);
+            }
+            else if (_polyCount == 4)
+            {
+                srcRotMatA = CvInvoke.GetPerspectiveTransform(pointA, dstPoint);
+                srcRotMatB = CvInvoke.GetPerspectiveTransform(pointB, dstPoint);
+            }
+            Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
+            Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
+            srcWarpA.SetZero();
+            srcWarpB.SetZero();
+            CvInvoke.WarpAffine(tempA, srcWarpA, srcRotMatA, dstSize);
+            CvInvoke.WarpAffine(tempB, srcWarpB, srcRotMatB, dstSize);
+
+            dstFace = integrationRatio * tempA + (1 - integrationRatio) * tempB + dstFace;
+        }
+
+        private PointF[] convertPointF(PointF[] _pointSet, int _size)
+        {
+            PointF[] retPointSet = new PointF[_size];
+
+            for (int count = 0; count < _size; count++ )
+            {
+                retPointSet[count].X = _pointSet[count].X * (float)srcSize.Width;
+                retPointSet[count].Y = _pointSet[count].Y * (float)srcSize.Height;
+            }
+
+            return retPointSet;
+        }
+
+        private PointF[] getDstPoint(PointF[] _pointA, PointF[] _pointB, int _size)
+        {
+            PointF[] retPoint = new PointF[_size];
+
+            for (int count = 0; count < _size; count++ )
+            {
+                retPoint[count].X = ((float)(_pointA[count].X * integrationRatio) + (float)(_pointB[count].X * (1 - integrationRatio)));
+                retPoint[count].Y = ((float)(_pointA[count].Y * integrationRatio) + (float)(_pointB[count].Y * (1 - integrationRatio)));
+            }
+
+            return retPoint;
+        }
+
+        private Point[] convertPointF2Point(PointF[] _pointF, int _size)
+        {
+            Point[] retPoint = new Point[_size];
+
+            for (int count = 0; count < _size; count++ )
+            {
+                retPoint[count].X = (int)_pointF[count].X;
+                retPoint[count].Y = (int)_pointF[count].Y;
+            }
+
+            return retPoint;
         }
 
     }
