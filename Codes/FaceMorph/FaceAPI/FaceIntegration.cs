@@ -48,25 +48,11 @@ namespace FaceAPI
 
         public Image<Bgr, byte> integrateFace()
         {
-            //Mat srcRotMatA = new Mat();
-            //Mat srcRotMatB = new Mat();
-
-            //srcRotMatA = CvInvoke.GetAffineTransform(srcLandmarkA, dstLandmark);
-            //srcRotMatB = CvInvoke.GetAffineTransform(srcLandmarkB, dstLandmark);
-            //Image<Bgr, byte> srcWarpA = new Image<Bgr, byte>(dstSize);
-            //Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
-            //srcWarpA.SetZero();
-            //srcWarpB.SetZero();
-            //CvInvoke.WarpAffine(faceImgA, srcWarpA, srcRotMatA, dstSize);
-            //CvInvoke.WarpAffine(faceImgB, srcWarpB, srcRotMatB, dstSize);
-
-            //dstFace = integrationRatio * faceImgA + (1 - integrationRatio) * faceImgB;
-
-            for (int count = 0; count < 10; count++ )
+            for (int count = 0; count < 6; count++ )
             {
                 PointF[] triPointA = new PointF[3];
                 PointF[] triPointB = new PointF[3];
-                for (int countInner = 0; count < 3; count++)
+                for (int countInner = 0; countInner < 3; countInner++)
                 {
                     triPointA[countInner] = triangularSetA[count, countInner];
                     triPointB[countInner] = triangularSetB[count, countInner];
@@ -78,7 +64,7 @@ namespace FaceAPI
             {
                 PointF[] quadPointA = new PointF[4];
                 PointF[] quadPointB = new PointF[4];
-                for (int countInner = 0; count < 4; count++)
+                for (int countInner = 0; countInner < 4; countInner++)
                 {
                     quadPointA[countInner] = quadrangularSetA[count, countInner];
                     quadPointB[countInner] = quadrangularSetB[count, countInner];
@@ -128,86 +114,62 @@ namespace FaceAPI
 
         private void setSrcTriangularSet()
         {
-            triangularSetA = new PointF[10, 3]{
-                {landmarkA[(int)Position.EyebrowLeftOuter],
-                landmarkA[(int)Position.EyebrowLeftInner],
-                landmarkA[(int)Position.PupilLeft]},
-                {landmarkA[(int)Position.EyebrowRightOuter],
-                landmarkA[(int)Position.EyebrowRightInner],
-                landmarkA[(int)Position.PupilRight]},
-                {landmarkA[(int)Position.MouthLeft],
-                landmarkA[(int)Position.MouthRight],
-                landmarkA[(int)Position.UnderLipBottom]},
-                {new PointF(0, 0),
-                landmarkA[(int)Position.EyebrowLeftInner],
-                landmarkA[(int)Position.EyebrowLeftOuter]},
-                {new Point(1, 0),
-                landmarkA[(int)Position.EyebrowRightInner],
-                landmarkA[(int)Position.EyebrowRightOuter]},
-                {landmarkA[(int)Position.MouthLeft],
-                landmarkA[(int)Position.UnderLipBottom],
-                new PointF(0, 1)},
-                {landmarkA[(int)Position.MouthRight],
-                landmarkA[(int)Position.UnderLipBottom],
-                new PointF(1, 1)},
-                {landmarkA[(int)Position.UnderLipBottom],
-                new PointF(1, 0),
-                new PointF(1, 1)},
+            triangularSetA = new PointF[6, 3]{
                 {landmarkA[(int)Position.EyebrowLeftOuter],
                 landmarkA[(int)Position.PupilLeft],
                 landmarkA[(int)Position.MouthLeft]},
                 {landmarkA[(int)Position.EyebrowRightOuter],
                 landmarkA[(int)Position.PupilRight],
                 landmarkA[(int)Position.MouthRight]},
+                {landmarkA[(int)Position.MouthLeft],
+                landmarkA[(int)Position.MouthRight],
+                landmarkA[(int)Position.UnderLipBottom]},
+                {new PointF(0, 1),
+                landmarkA[(int)Position.MouthLeft],
+                landmarkA[(int)Position.UnderLipBottom]},
+                {new Point(1, 1),
+                landmarkA[(int)Position.MouthRight],
+                landmarkA[(int)Position.UnderLipBottom]},
+                {landmarkA[(int)Position.UnderLipBottom],
+                new PointF(0, 1),
+                new PointF(1, 1)}
             };
 
-            triangularSetB = new PointF[10, 3]{
-                {landmarkB[(int)Position.EyebrowLeftOuter],
-                landmarkB[(int)Position.EyebrowLeftInner],
-                landmarkB[(int)Position.PupilLeft]},
-                {landmarkB[(int)Position.EyebrowRightOuter],
-                landmarkB[(int)Position.EyebrowRightInner],
-                landmarkB[(int)Position.PupilRight]},
-                {landmarkB[(int)Position.MouthLeft],
-                landmarkB[(int)Position.MouthRight],
-                landmarkB[(int)Position.UnderLipBottom]},
-                {new PointF(0, 0),
-                landmarkB[(int)Position.EyebrowLeftInner],
-                landmarkB[(int)Position.EyebrowLeftOuter]},
-                {new Point(1, 0),
-                landmarkB[(int)Position.EyebrowRightInner],
-                landmarkB[(int)Position.EyebrowRightOuter]},
-                {landmarkB[(int)Position.MouthLeft],
-                landmarkB[(int)Position.UnderLipBottom],
-                new PointF(0, 1)},
-                {landmarkB[(int)Position.MouthRight],
-                landmarkB[(int)Position.UnderLipBottom],
-                new PointF(1, 1)},
-                {landmarkB[(int)Position.UnderLipBottom],
-                new PointF(1, 0),
-                new PointF(1, 1)},
+            triangularSetB = new PointF[6, 3]{
                 {landmarkB[(int)Position.EyebrowLeftOuter],
                 landmarkB[(int)Position.PupilLeft],
                 landmarkB[(int)Position.MouthLeft]},
                 {landmarkB[(int)Position.EyebrowRightOuter],
                 landmarkB[(int)Position.PupilRight],
                 landmarkB[(int)Position.MouthRight]},
+                {landmarkB[(int)Position.MouthLeft],
+                landmarkB[(int)Position.MouthRight],
+                landmarkB[(int)Position.UnderLipBottom]},
+                {new PointF(0, 1),
+                landmarkB[(int)Position.MouthLeft],
+                landmarkB[(int)Position.UnderLipBottom]},
+                {new Point(1, 1),
+                landmarkB[(int)Position.MouthRight],
+                landmarkB[(int)Position.UnderLipBottom]},
+                {landmarkB[(int)Position.UnderLipBottom],
+                new PointF(0, 1),
+                new PointF(1, 1)}
             };
         }
 
         private void setSrcQuadrangularSet()
         {
             quadrangularSetA = new PointF[5, 4] {
-                {landmarkA[(int)Position.EyebrowLeftInner],
-                landmarkA[(int)Position.EyebrowRightInner],
+                {landmarkA[(int)Position.EyebrowLeftOuter],
+                landmarkA[(int)Position.EyebrowRightOuter],
                 landmarkA[(int)Position.PupilLeft],
                 landmarkA[(int)Position.PupilRight]},
                 {landmarkA[(int)Position.PupilLeft],
                 landmarkA[(int)Position.PupilRight],
                 landmarkA[(int)Position.MouthRight],
                 landmarkA[(int)Position.MouthLeft]},
-                {landmarkA[(int)Position.EyebrowLeftInner],
-                landmarkA[(int)Position.EyebrowRightInner],
+                {landmarkA[(int)Position.EyebrowLeftOuter],
+                landmarkA[(int)Position.EyebrowRightOuter],
                 new PointF(1, 0),
                 new PointF(0, 0)},
                 {landmarkA[(int)Position.EyebrowRightOuter],
@@ -221,16 +183,16 @@ namespace FaceAPI
             };
 
             quadrangularSetB = new PointF[5, 4] {
-                {landmarkB[(int)Position.EyebrowLeftInner],
-                landmarkB[(int)Position.EyebrowRightInner],
+                {landmarkB[(int)Position.EyebrowLeftOuter],
+                landmarkB[(int)Position.EyebrowRightOuter],
                 landmarkB[(int)Position.PupilLeft],
                 landmarkB[(int)Position.PupilRight]},
                 {landmarkB[(int)Position.PupilLeft],
                 landmarkB[(int)Position.PupilRight],
                 landmarkB[(int)Position.MouthRight],
                 landmarkB[(int)Position.MouthLeft]},
-                {landmarkB[(int)Position.EyebrowLeftInner],
-                landmarkB[(int)Position.EyebrowRightInner],
+                {landmarkB[(int)Position.EyebrowLeftOuter],
+                landmarkB[(int)Position.EyebrowRightOuter],
                 new PointF(1, 0),
                 new PointF(0, 0)},
                 {landmarkB[(int)Position.EyebrowRightOuter],
@@ -249,14 +211,14 @@ namespace FaceAPI
             PointF[] pointA = convertPointF(_pointA, _polyCount);
             Image<Gray, byte> maskA = new Image<Gray,byte>(srcSize);
             VectorOfVectorOfPoint pointSetA = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointA, _polyCount)));
-            CvInvoke.FillPoly(maskA, pointSetA, new MCvScalar(0));
+            CvInvoke.FillPoly(maskA, pointSetA, new MCvScalar(255), LineType.FourConnected);
             Image<Bgr, byte> tempA = new Image<Bgr,byte>(srcSize);
             tempA = faceImgA.Copy(maskA);
 
             PointF[] pointB = convertPointF(_pointB, _polyCount);
             Image<Gray, byte> maskB = new Image<Gray, byte>(srcSize);
             VectorOfVectorOfPoint pointSetB = new VectorOfVectorOfPoint(new VectorOfPoint(convertPointF2Point(pointB, _polyCount)));
-            CvInvoke.FillPoly(maskB, pointSetB,new MCvScalar(0));
+            CvInvoke.FillPoly(maskB, pointSetB,new MCvScalar(255), LineType.FourConnected);
             Image<Bgr, byte> tempB = new Image<Bgr, byte>(srcSize);
             tempB = faceImgB.Copy(maskB);
 
@@ -279,10 +241,20 @@ namespace FaceAPI
             Image<Bgr, byte> srcWarpB = new Image<Bgr, byte>(dstSize);
             srcWarpA.SetZero();
             srcWarpB.SetZero();
-            CvInvoke.WarpAffine(tempA, srcWarpA, srcRotMatA, dstSize);
-            CvInvoke.WarpAffine(tempB, srcWarpB, srcRotMatB, dstSize);
 
-            dstFace = integrationRatio * tempA + (1 - integrationRatio) * tempB + dstFace;
+            if (_polyCount == 3)
+            {
+                CvInvoke.WarpAffine(tempA, srcWarpA, srcRotMatA, dstSize);
+                CvInvoke.WarpAffine(tempB, srcWarpB, srcRotMatB, dstSize);
+            }
+            else if (_polyCount == 4)
+            {
+                CvInvoke.WarpPerspective(tempA, srcWarpA, srcRotMatA, dstSize);
+                CvInvoke.WarpPerspective(tempB, srcWarpB, srcRotMatB, dstSize);
+            }
+
+            CvInvoke.AddWeighted(srcWarpA, integrationRatio, srcWarpB, 1 - integrationRatio, 0, srcWarpA);
+            CvInvoke.Add(dstFace, srcWarpA, dstFace);
         }
 
         private PointF[] convertPointF(PointF[] _pointSet, int _size)

@@ -47,13 +47,13 @@ namespace FaceAPI
 
     class Program
     {
-        static string picFolder = "D:\\Codes\\datasets\\face_morph\\"; 
+        static string picFolder = "G:\\facedata\\"; 
         static void Main(string[] args)
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = picFolder + "pic1.jpg";
-            string kimFile = picFolder + "pic2.jpg";
+            string obamaFile = picFolder + "a.jpg";
+            string kimFile = picFolder + "b.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
