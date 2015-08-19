@@ -52,8 +52,8 @@ namespace FaceAPI
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = picFolder + "obama.jpg";
-            string kimFile = picFolder + "xi.jpg";
+            string obamaFile = picFolder + "xi.jpg";
+            string kimFile = picFolder + "c.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -75,6 +75,7 @@ namespace FaceAPI
                 new Size(300, 300),
                 0.5);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
+            CvInvoke.MedianBlur(dstFace, dstFace, 5);
             dstFace.Save(picFolder + "result.jpg");
         }
 
