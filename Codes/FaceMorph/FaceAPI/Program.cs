@@ -52,8 +52,8 @@ namespace FaceAPI
         {
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = picFolder + "xi.jpg";
-            string kimFile = picFolder + "c.jpg";
+            string obamaFile = picFolder + "c.jpg";
+            string kimFile = picFolder + "xi.jpg";
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -64,8 +64,11 @@ namespace FaceAPI
             Rectangle obamaRectangle = convertRectangleFormation(obamaRect[0]);
             Rectangle kimRectangle = convertRectangleFormation(kimRect[0]);
 
-            Image<Bgr, byte> obamaFace = new Image<Bgr, byte>(obamaFile).GetSubRect(obamaRectangle);
-            Image<Bgr, byte> kimFace = new Image<Bgr, byte>(kimFile).GetSubRect(kimRectangle);
+            Image<Bgr, byte> obamaFaceOriginal = new Image<Bgr, byte>(obamaFile);
+            Image<Bgr, byte> kimFaceOriginal = new Image<Bgr, byte>(kimFile);
+
+            Image<Bgr, byte> obamaFace = obamaFaceOriginal.GetSubRect(obamaRectangle);
+            Image<Bgr, byte> kimFace = kimFaceOriginal.GetSubRect(kimRectangle);
 
             FaceIntegration faceIntegration = new FaceIntegration(
                 obamaFace,
@@ -76,7 +79,8 @@ namespace FaceAPI
                 0.5);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
             CvInvoke.MedianBlur(dstFace, dstFace, 5);
-            dstFace.Save(picFolder + "result.jpg");
+            dstFace.Resize(obamaRectangle.Width, obamaRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(obamaFace);
+            obamaFaceOriginal.Save(picFolder + "result.jpg");
         }
 
         private static void runFaceAPI(
