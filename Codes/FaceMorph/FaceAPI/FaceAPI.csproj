@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="FaceAPI.cs" />
     <Compile Include="FaceIntegration.cs" />
+    <Compile Include="IFaceMorph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
