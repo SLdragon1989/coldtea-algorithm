@@ -45,15 +45,24 @@ namespace FaceAPI
         UnderLipTop
     };
 
-    class Program
+    public class Program : IFaceMorph
     {
-        static string picFolder = "D:\\Codes\\datasets\\face_morph\\"; 
-        static void Main(string[] args)
+        static string picFolder = @"E:\SIE\";//"D:\\Codes\\datasets\\face_morph\\"; 
+
+        public static void Main(string[] args)
         {
+            IFaceMorph ifa = new Program();
+            ifa.Morph(picFolder + "pic1.jpg", picFolder + "pic2.jpg", picFolder, 0.5);
+        }
+
+        public virtual List<string> Morph(string fileName1, string fileName2, string outputFolder, double p)
+        {
+            List<string> results = new List<string>() { outputFolder + "resul1.jpg", outputFolder + "resul2.jpg", outputFolder + "resul3.jpg" };
+
             FaceRectangle[] obamaRect, kimRect;
             FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = picFolder + "c.jpg";
-            string kimFile = picFolder + "xi.jpg";
+            string obamaFile = fileName1;
+            string kimFile = fileName2;
 
             runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
             runFaceAPI(kimFile, out kimRect, out kimLandmarks);
@@ -76,11 +85,17 @@ namespace FaceAPI
                 obamaLandmarkArr,
                 kimLandmarkArr,
                 new Size(300, 300),
-                0.5);
+                p);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
             CvInvoke.MedianBlur(dstFace, dstFace, 5);
+
+            dstFace.Save(results[0]);
+            
             dstFace.Resize(obamaRectangle.Width, obamaRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(obamaFace);
-            obamaFaceOriginal.Save(picFolder + "result.jpg");
+            obamaFaceOriginal.Save(results[1]);
+            dstFace.Resize(kimRectangle.Width, kimRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(kimFace);
+            kimFaceOriginal.Save(results[2]);
+            return results; 
         }
 
         private static void runFaceAPI(
