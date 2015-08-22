@@ -47,7 +47,7 @@ namespace FaceAPI
 
     public class Program : IFaceMorph
     {
-        static string picFolder = @"E:\SIE\";//"D:\\Codes\\datasets\\face_morph\\"; 
+        static string picFolder = @"G:\facedata\";
 
         public static void Main(string[] args)
         {
@@ -59,31 +59,31 @@ namespace FaceAPI
         {
             List<string> results = new List<string>() { outputFolder + "resul1.jpg", outputFolder + "resul2.jpg", outputFolder + "resul3.jpg" };
 
-            FaceRectangle[] obamaRect, kimRect;
-            FaceLandmarks[] obamaLandmarks, kimLandmarks;
-            string obamaFile = fileName1;
-            string kimFile = fileName2;
+            FaceRectangle[] srcARect, srcBRect;
+            FaceLandmarks[] srcALandmarks, srcBLandmarks;
+            string srcAFile = fileName1;
+            string srcBFile = fileName2;
 
-            runFaceAPI(obamaFile, out obamaRect, out obamaLandmarks);
-            runFaceAPI(kimFile, out kimRect, out kimLandmarks);
+            runFaceAPI(srcAFile, out srcARect, out srcALandmarks);
+            runFaceAPI(srcBFile, out srcBRect, out srcBLandmarks);
 
-            PointF[] obamaLandmarkArr = convertLandmarkFormation(ref obamaLandmarks[0], ref obamaRect[0]);
-            PointF[] kimLandmarkArr = convertLandmarkFormation(ref kimLandmarks[0], ref kimRect[0]);
+            PointF[] srcALandmarkArr = convertLandmarkFormation(ref srcALandmarks[0], ref srcARect[0]);
+            PointF[] srcBLandmarkArr = convertLandmarkFormation(ref srcBLandmarks[0], ref srcBRect[0]);
 
-            Rectangle obamaRectangle = convertRectangleFormation(obamaRect[0]);
-            Rectangle kimRectangle = convertRectangleFormation(kimRect[0]);
+            Rectangle srcARectangle = convertRectangleFormation(srcARect[0]);
+            Rectangle srcBRectangle = convertRectangleFormation(srcBRect[0]);
 
-            Image<Bgr, byte> obamaFaceOriginal = new Image<Bgr, byte>(obamaFile);
-            Image<Bgr, byte> kimFaceOriginal = new Image<Bgr, byte>(kimFile);
+            Image<Bgr, byte> srcAFaceOriginal = new Image<Bgr, byte>(srcAFile);
+            Image<Bgr, byte> srcBFaceOriginal = new Image<Bgr, byte>(srcBFile);
 
-            Image<Bgr, byte> obamaFace = obamaFaceOriginal.GetSubRect(obamaRectangle);
-            Image<Bgr, byte> kimFace = kimFaceOriginal.GetSubRect(kimRectangle);
+            Image<Bgr, byte> srcAFace = srcAFaceOriginal.GetSubRect(srcARectangle);
+            Image<Bgr, byte> srcBFace = srcBFaceOriginal.GetSubRect(srcBRectangle);
 
             FaceIntegration faceIntegration = new FaceIntegration(
-                obamaFace,
-                kimFace,
-                obamaLandmarkArr,
-                kimLandmarkArr,
+                srcAFace,
+                srcBFace,
+                srcALandmarkArr,
+                srcBLandmarkArr,
                 new Size(300, 300),
                 p);
             Image<Bgr, byte> dstFace = faceIntegration.integrateFace();
@@ -91,10 +91,10 @@ namespace FaceAPI
 
             dstFace.Save(results[0]);
             
-            dstFace.Resize(obamaRectangle.Width, obamaRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(obamaFace);
-            obamaFaceOriginal.Save(results[1]);
-            dstFace.Resize(kimRectangle.Width, kimRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(kimFace);
-            kimFaceOriginal.Save(results[2]);
+            dstFace.Resize(srcARectangle.Width, srcARectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(srcAFace);
+            srcAFaceOriginal.Save(results[1]);
+            dstFace.Resize(srcBRectangle.Width, srcBRectangle.Height, Emgu.CV.CvEnum.Inter.Linear).CopyTo(srcBFace);
+            srcBFaceOriginal.Save(results[2]);
             return results; 
         }
 
