@@ -47,12 +47,12 @@ namespace FaceAPI
 
     public class Program : IFaceMorph
     {
-        static string picFolder = @"G:\facedata\";
+        static string picFolder = @"D:\Codes\datasets\face_morph\";
 
         public static void Main(string[] args)
         {
             IFaceMorph ifa = new Program();
-            ifa.Morph(picFolder + "pic1.jpg", picFolder + "pic2.jpg", picFolder, 0.5);
+            ifa.Morph(picFolder + "f.jpg", picFolder + "g.jpg", picFolder, 0.5);
         }
 
         public virtual List<string> Morph(string fileName1, string fileName2, string outputFolder, double p)
