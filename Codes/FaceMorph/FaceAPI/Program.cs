@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-
+using System.Diagnostics;
 using Microsoft.ProjectOxford.Face;
 using Microsoft.ProjectOxford.Face.Contract;
 
@@ -52,7 +52,7 @@ namespace FaceAPI
         public static void Main(string[] args)
         {
             IFaceMorph ifa = new Program();
-            ifa.Morph(picFolder + "f.jpg", picFolder + "g.jpg", picFolder, 0.5);
+            ifa.Morph(picFolder + "pic1.jpg", picFolder + "pic2.jpg", picFolder, 0.5);
         }
 
         public virtual List<string> Morph(string fileName1, string fileName2, string outputFolder, double p)
@@ -70,8 +70,8 @@ namespace FaceAPI
             PointF[] srcALandmarkArr = convertLandmarkFormation(ref srcALandmarks[0], ref srcARect[0]);
             PointF[] srcBLandmarkArr = convertLandmarkFormation(ref srcBLandmarks[0], ref srcBRect[0]);
 
-            Rectangle srcARectangle = convertRectangleFormation(srcARect[0]);
-            Rectangle srcBRectangle = convertRectangleFormation(srcBRect[0]);
+            Rectangle srcARectangle = convertRectangleFormation(srcARect[0], srcAFile);
+            Rectangle srcBRectangle = convertRectangleFormation(srcBRect[0], srcBFile);
 
             Image<Bgr, byte> srcAFaceOriginal = new Image<Bgr, byte>(srcAFile);
             Image<Bgr, byte> srcBFaceOriginal = new Image<Bgr, byte>(srcBFile);
@@ -166,13 +166,25 @@ namespace FaceAPI
         }
 
         private static Rectangle convertRectangleFormation(
-            FaceRectangle _rectangle)
+            FaceRectangle _rectangle, string fileName)
         {
-            return new Rectangle(
+            Rectangle rect = new Rectangle(
                 _rectangle.Left,
                 _rectangle.Top,
                 _rectangle.Width,
                 _rectangle.Height);
+
+            Image im = Image.FromFile(fileName);
+            if (rect.Width + rect.Left > im.Width)
+            {
+                rect.Width = im.Width - rect.Left;
+            }
+            if (rect.Height + rect.Top > im.Height)
+            {
+                rect.Height = im.Height - rect.Top;
+            }
+
+            return rect;
         }
     }
 }
